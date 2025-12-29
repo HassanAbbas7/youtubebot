@@ -18,7 +18,7 @@ from status_store import set_status, get_status, list_statuses
 
 # ----------------- CONFIG -----------------
 OUTPUT_ROOT = Path("outputs")
-AUTO = True  # Set True to skip all approvals
+AUTO = False  # Set True to skip all approvals
 # -----------------------------------------
 
 ROWS_CACHE = []
@@ -138,6 +138,21 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await process_next_row(chat_id, context)
 
+
+async def start_auto(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    global ROWS_CACHE, CURRENT_INDEX, PROCESSING_ACTIVE
+    global AUTO
+
+    AUTO = True
+    chat_id = update.effective_chat.id
+
+    await update.message.reply_text("Loading Google Sheets rows...")
+
+    ROWS_CACHE = fetch_rows()
+    PROCESSING_ACTIVE = True
+    CURRENT_INDEX = 0
+
+    await process_next_row(chat_id, context)
 # -----------------------------------------------------------
 # /stop
 # -----------------------------------------------------------
@@ -422,6 +437,7 @@ def main():
     app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("start_auto", start_auto))
     app.add_handler(CommandHandler("status", status_cmd))
     app.add_handler(CommandHandler("stop", stop))
     app.add_handler(CallbackQueryHandler(callback_handler))
