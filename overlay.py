@@ -2,11 +2,11 @@ import ffmpeg
 import os
 import shutil
 
-def overlay(input_video):
+def overlay(input_video, overlay):
     main = ffmpeg.input(input_video)
 
     overlay_vid = ffmpeg.input(
-        "overlay/prebaked_overlay.mov",
+        overlay,
         stream_loop=-1
     )
 

@@ -197,7 +197,7 @@ def main():
         if overlay_:
             overlay.overlay(output_path, overlay_)
 
-        if not publish_at:
+        if publish_at:
             upload_video(
                 channel_name,
                 output_path,
