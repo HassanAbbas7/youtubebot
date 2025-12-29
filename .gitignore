@@ -1,0 +1,9 @@
+*.mp4
+*.wav
+*.mp3
+*.json
+*.mov
+overlay/
+temp/
+output/
+config.py
